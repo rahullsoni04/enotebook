@@ -1,10 +1,6 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = "rahul";
 
-/*
-    @return : users
-*/
-
 const fetchUser = (req, res, next) => {
     try{
         const token = req.header("auth-token");
