@@ -2,15 +2,26 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import noteContext from "../contexts/notes/noteContext";
 import AddNote from "./AddNote";
 import NoteItem from "./NoteItem";
+import alertContext from "../contexts/alertContext";
+import {useNavigate} from "react-router-dom"; 
 
 const Notes = () => {
+  
+  const history = useNavigate();
+
   const context = useContext(noteContext);
-  const { note, readNote,updateNote } = context;
+  const { note, readNote,updateNote,deleteNote } = context;
+
+  const AContext = useContext(alertContext);
+  const { showAlert } = AContext;
 
   const [enote, seteNote] = useState({tittle:"",description:"",tag:""});
 
   useEffect(() => {
-    readNote();
+    if(!localStorage.getItem('token')){
+      history('/login');
+    }else
+      readNote();
     // eslint-disable-next-line
   }, [enote]);
 
@@ -29,6 +40,13 @@ const Notes = () => {
     e.preventDefault();
     updateNote(enote);
     ref.current.click();
+    showAlert("Note updates successfully", "success");
+  };
+
+  const handleDelete = (id) => {
+    deleteNote(id);
+    showAlert("Note deleted successfully", "success");
+
   };
 
   return (
@@ -138,7 +156,7 @@ const Notes = () => {
       <div className="row my-3">
         {note.map((noteItem, index) => {
           return (
-            <NoteItem key={index} note={noteItem} editNote={editNote} />
+            <NoteItem key={index} note={noteItem} editNote={editNote} handleDelete={handleDelete} />
           );
         })}
       </div>

@@ -48,40 +48,15 @@ function NavBar() {
                   About
                 </Link>
               </li>
-              <li className="nav-item justify-content-end">
-                <Link
-                  className={`nav-link  ${
-                    location.pathname === "/about" ? "active" : ""
-                  }`}
-                  aria-current="page"
-                  to="/about"
-                >
-                  About
-                </Link>
-              </li>
-              <li className="nav-item justify-content-end">
-                <Link
-                  className={`nav-link  ${
-                    location.pathname === "/about" ? "active" : ""
-                  }`}
-                  aria-current="page"
-                  to="/login"
-                >
-                  Login
-                </Link>
-              </li>
-              <li className="nav-item justify-content-end">
-                <Link
-                  className={`nav-link  ${
-                    location.pathname === "/about" ? "active" : ""
-                  }`}
-                  aria-current="page"
-                  to="/signup"
-                >
-                  Sign up
-                </Link>
-              </li>
+             
             </ul>
+            {!localStorage.getItem('token') ? <div className="ms-auto">
+              <Link type="button" className="btn btn-primary mx-2" to="/login">Login</Link>
+              <Link type="button" className="btn btn-primary mx-2" to="/signup">Sign up</Link>
+            </div>:
+            <div className="ms-auto">
+              <Link type="button" className="btn btn-primary mx-2" to="/login" onClick={()=>localStorage.removeItem('token')}>Logout</Link>
+            </div>}
           </div>
         </div>
       </nav>

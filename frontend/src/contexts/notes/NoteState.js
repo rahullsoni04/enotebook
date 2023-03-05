@@ -3,9 +3,6 @@ import NoteContext from "./noteContext";
 
 const NoteState = (props) => {
   const host = "http://localhost:5000";
-  const authToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzZmYxOGRmMWY0OTNhNTFhMzllYzY5YiIsImlhdCI6MTY3NzY2MjUwNn0.fevWzXYIWzHkX_vAJWpB5cJHOY1gJAmv9M_UlIHsXeg";
-
   const notes = [];
 
   const [note, setNote] = useState(notes);
@@ -21,7 +18,7 @@ const NoteState = (props) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": authToken,
+        "auth-token": localStorage.getItem('token'),
       },
       body: JSON.stringify(n),
     });
@@ -35,7 +32,7 @@ const NoteState = (props) => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": authToken,
+        "auth-token": localStorage.getItem('token'),
       },
     });
     let res = await response.json();
@@ -49,7 +46,7 @@ const NoteState = (props) => {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
-            "auth-token": authToken,
+            "auth-token": localStorage.getItem('token'),
         },
         body: JSON.stringify(enote),
     });
@@ -63,7 +60,7 @@ const NoteState = (props) => {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
-        "auth-token": authToken,
+        "auth-token": localStorage.getItem('token'),
       },
     });
     await response.json();

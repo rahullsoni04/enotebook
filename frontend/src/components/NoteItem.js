@@ -1,18 +1,11 @@
-import React,{useContext} from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import noteContext from "../contexts/notes/noteContext";
 
 
 const NoteItem = (props) => {
-  const { note,editNote } = props;
-  const context = useContext(noteContext);
-  const { deleteNote } = context;
-
-  const handleDelete = (id) => {
-    deleteNote(id);
-    console.log(context)
-  };
+  // Props from the Notes.js file
+  const { note,editNote,handleDelete } = props;
 
   return (
     <>

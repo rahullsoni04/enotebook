@@ -21,9 +21,10 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success = false;
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success : success,errors: errors.array(),error: errors[0].msg });
     }
 
     const { name,email, password } = req.body;
@@ -32,7 +33,7 @@ router.post(
         // Check user already exists
         let user = await User.findOne({ email: email });
         if (user) {
-            return res.status(400).json({ error: "User already exists" });
+            return res.status(400).json({ success : success,error: "Email already exists" });
         }
         
         // Encryption 
@@ -48,12 +49,12 @@ router.post(
         
         // Auth token
       const authToken = jwt.sign({ id: user.id }, JWT_SECRET);
-      console.log(authToken);
-      res.json({authToken});
+      success = true;
+      res.json({success,authToken});
       
     } catch (e) {
       console.error(e.message);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send({success : success, error : "Internal Server Error"+e});
     }
   }
 );
@@ -70,8 +71,9 @@ router.post(
   ],
   async (req, res) => {
     const errors = validationResult(req);
+    let success = false;
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(400).json({ success:success,errors: errors.array() });
     }
 
     const { email, password } = req.body;
@@ -80,23 +82,23 @@ router.post(
       // Check user exists
       let user = await User.findOne({ email: email });
       if (!user) {
-        return res.status(400).json({ error: "Invalid credentials" });
+        console.log("in user")
+        return res.status(400).json({success:false , error: "Invalid credentials" });
       }
 
       // Compare password
       const comparePass = await bcrypt.compare(password, user.password);
       if (!comparePass) {
-          return res.status(400).json({ error: "Invalid credentials" });
+        return res.status(400).json({ success:false ,error: "Invalid credentials" });
       }
 
       const authToken = jwt.sign({ id: user.id }, JWT_SECRET);
-      console.log(authToken);
-
-      res.send({authToken});
-
+      
+      success = true;
+      res.send({success,authToken});
+      
     } catch (e) {
-      console.error(e.message);
-      res.status(500).send("Internal Server Error");
+      res.status(500).send({success : false,error : "Internal Server Error"});
     }
   }
 );
